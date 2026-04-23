@@ -1,0 +1,23 @@
+/* Uhr */
+#gtklock-clock {
+    color: #26ae00;
+    font-size: 64pt;
+    margin-bottom: 20px;
+}
+
+/* Eingabefeld */
+entry {
+    background: #313244;
+    color: #cdd6f4;
+    border-radius: 12px;
+    border: 2px solid #cba6f7;
+    padding: 12px;
+    min-width: 300px;
+}
+
+/* Benutzername */
+#gtklock-username {
+    color: #26ae00;
+    font-size: 16pt;
+    margin-bottom: 10px;
+}
