@@ -13,7 +13,10 @@ Meine persönliche [swaylock](https://github.com/swaywm/swaylock) Konfiguration 
 sudo pacman -S swaylock
 
 # Oder mit Effects-Support (empfohlen)
-yay -S swaylock-effects
+puru -S swaylock-effects
+
+# Screenshot-Tool
+sudo pacman -S grim
 ```
 
 ## Installation
@@ -36,24 +39,60 @@ mkdir -p ~/.config/swaylock
 cp .config/swaylock/config ~/.config/swaylock/config
 ```
 
-## Hintergrundbild
+## Lock-Script
 
-Ein Bild unter `~/.config/swaylock/lockscreen.png` ablegen, oder in der Config den `image=` Eintrag auf deinen gewünschten Pfad anpassen.
+Das Script macht automatisch einen Screenshot, lockt den Bildschirm mit Blur-Effekt und löscht das Bild danach wieder.
+
+### Script erstellen
+
+```bash
+nano ~/.local/bin/lock.sh
+```
+
+Folgenden Inhalt einfügen:
+
+```bash
+#!/bin/bash
+# Screenshot vom aktuellen Bildschirm machen
+grim /tmp/lockscreen.png
+
+# Bildschirm locken mit Blur
+swaylock
+
+# Nach dem Unlock das Bild wieder löschen
+rm -f /tmp/lockscreen.png
+```
+
+Speichern: `Strg + O` → Enter → `Strg + X`
+
+### Script ausführbar machen
+
+```bash
+chmod +x ~/.local/bin/lock.sh
+```
+
+> Kein Output = kein Fehler = hat funktioniert! ✅
+
+### Script ausführen
+
+```bash
+~/.local/bin/lock.sh
+```
 
 ## Sway Integration
 
 In die `~/.config/sway/config` einfügen:
 
 ```
-# Manueller Lock
-bindsym $mod+l exec swaylock
+# Manueller Lock mit Script
+bindsym $mod+l exec ~/.local/bin/lock.sh
 
 # Automatischer Lock mit swayidle
 exec swayidle -w \
-    timeout 300 'swaylock -f' \
+    timeout 300 'grim /tmp/lockscreen.png && swaylock && rm -f /tmp/lockscreen.png' \
     timeout 600 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -f'
+    before-sleep 'grim /tmp/lockscreen.png && swaylock -f && rm -f /tmp/lockscreen.png'
 ```
 
 ## Farbschema
